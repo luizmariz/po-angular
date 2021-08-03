@@ -87,9 +87,9 @@ export abstract class PoNotificationBaseService {
    * @param {PoNotification | string} notification Objeto PoNotification com os dados da notificação
    */
   private buildToaster(notification: PoNotification | string, type: PoToasterType): PoToaster {
+    this.verifyLimitToaster();
     let index = 0;
     let orientation;
-
     if (
       (<PoNotification>notification).orientation === undefined ||
       (<PoNotification>notification).orientation === PoToasterOrientation.Bottom
@@ -140,4 +140,12 @@ export abstract class PoNotificationBaseService {
    * @param {PoToasterOrientation} orientation Orientação do PoToaster: Top ou Bottom
    */
   abstract destroyToaster(toaster: ComponentRef<any>): void;
+
+  /**
+   * @docsPrivate
+   *
+   * Método responsável por destruir o primeiro po-toaster caso já existam 5 notificações.
+   *
+   */
+  abstract verifyLimitToaster(abc?: string): void;
 }

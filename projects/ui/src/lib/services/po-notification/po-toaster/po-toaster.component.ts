@@ -10,6 +10,7 @@ import { PoToasterBaseComponent } from './po-toaster-base.component';
 import { PoToaster } from './po-toaster.interface';
 import { PoToasterType } from './po-toaster-type.enum';
 import { PoToasterOrientation } from './po-toaster-orientation.enum';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 /**
  * @docsPrivate
@@ -18,7 +19,18 @@ import { PoToasterOrientation } from './po-toaster-orientation.enum';
  */
 @Component({
   selector: 'po-toaster',
-  templateUrl: './po-toaster.component.html'
+  templateUrl: './po-toaster.component.html',
+  animations: [
+    trigger('fadeInOut', [
+      state(
+        'void',
+        style({
+          opacity: 0
+        })
+      ),
+      transition('void <=> *', animate(500))
+    ])
+  ]
 })
 export class PoToasterComponent extends PoToasterBaseComponent {
   /* Componente toaster */
@@ -111,6 +123,10 @@ export class PoToasterComponent extends PoToasterBaseComponent {
 
   getShowToaster() {
     return this.showToaster;
+  }
+
+  setShowToaster(visible: boolean) {
+    this.showToaster = visible;
   }
 
   getIcon() {
