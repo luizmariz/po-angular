@@ -1,4 +1,5 @@
 import { TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { configureTestSuite } from './../../util-test/util-expect.spec';
 
@@ -11,7 +12,8 @@ describe('PoNotificationService:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      providers: [PoComponentInjectorService, PoNotificationService]
+      providers: [PoComponentInjectorService, PoNotificationService],
+      imports: [NoopAnimationsModule]
     });
   });
 
@@ -35,7 +37,7 @@ describe('PoNotificationService:', () => {
 
     expect(notificationService.stackTop.length === 1).toBeTruthy();
 
-    tick(10001);
+    tick(10501);
 
     expect(notificationService.stackTop.length === 0).toBeTruthy();
   }));
@@ -49,7 +51,7 @@ describe('PoNotificationService:', () => {
 
     expect(notificationService.stackBottom.length === 1).toBeTruthy();
 
-    tick(3001);
+    tick(3501);
 
     expect(notificationService.stackBottom.length === 0).toBeTruthy();
   }));
@@ -64,7 +66,7 @@ describe('PoNotificationService:', () => {
 
       expect(notificationService.stackTop.length === 1).toBeTruthy();
 
-      tick(3001);
+      tick(3501);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
     }));
@@ -84,7 +86,7 @@ describe('PoNotificationService:', () => {
 
       expect(notificationService.stackTop.length === 2).toBeTruthy();
 
-      tick(3100);
+      tick(4101);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
     }));

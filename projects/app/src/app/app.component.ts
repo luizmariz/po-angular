@@ -4,18 +4,7 @@ import { PoNotificationService } from '../../../ui/src/lib';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  animations: [
-    trigger('fadeInOut', [
-      state(
-        'void',
-        style({
-          opacity: 0
-        })
-      ),
-      transition('void <=> *', animate(500))
-    ])
-  ]
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
   orientation: string = 'botton';

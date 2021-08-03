@@ -144,7 +144,7 @@ export abstract class PoNotificationBaseService {
   /**
    * @docsPrivate
    *
-   * Método responsável por destruir o primeiro po-toaster caso já existam 5 notificações.
+   * Método responsável por remover o primeiro po-toaster caso já existam 5 notificações.
    *
    */
   abstract verifyLimitToaster(abc?: string): void;

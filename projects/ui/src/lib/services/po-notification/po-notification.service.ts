@@ -63,7 +63,7 @@ export class PoNotificationService extends PoNotificationBaseService {
     console.log('Tamanho o = ' + this.stackBottom.length);
   }
 
-  verifyLimitToaster(abc?: string) {
+  verifyLimitToaster() {
     if (this.stackBottom.length > 5) {
       this.stackBottom[0].instance.setShowToaster(false);
       this.destroyToaster(this.stackBottom[0]);

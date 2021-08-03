@@ -7,6 +7,7 @@ import { PoToaster } from './po-toaster.interface';
 import { PoToasterType } from './po-toaster-type.enum';
 import { PoToasterOrientation } from './po-toaster-orientation.enum';
 import { PoToasterComponent } from './po-toaster.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PoToasterComponent', () => {
   let component: PoToasterComponent;
@@ -80,7 +81,8 @@ describe('PoToasterComponent', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      declarations: [PoToasterComponent]
+      declarations: [PoToasterComponent],
+      imports: [NoopAnimationsModule]
     });
   });
 
