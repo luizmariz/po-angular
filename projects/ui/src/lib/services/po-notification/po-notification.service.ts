@@ -36,8 +36,8 @@ export class PoNotificationService extends PoNotificationBaseService {
   }
 
   createToaster(toaster: PoToaster): void {
+    this.verifyLimitToaster();
     const componentRef: ComponentRef<any> = this.poComponentInjector.createComponentInApplication(PoToasterComponent);
-
     toaster.componentRef = componentRef;
 
     componentRef.changeDetectorRef.detectChanges();
@@ -48,19 +48,35 @@ export class PoNotificationService extends PoNotificationBaseService {
     } else {
       this.stackBottom.push(componentRef);
     }
+    this.verifyLimitToaster();
 
     this.observableOnClose(componentRef);
 
+    console.log('Tamanho n = ' + this.stackBottom.length);
+
     if (!(toaster.action && toaster.actionLabel)) {
       setTimeout(() => {
+        componentRef.instance.setShowToaster(false);
         this.destroyToaster(componentRef);
       }, toaster.duration);
+    }
+    console.log('Tamanho o = ' + this.stackBottom.length);
+  }
+
+  verifyLimitToaster(abc?: string) {
+    if (this.stackBottom.length > 5) {
+      this.stackBottom[0].instance.setShowToaster(false);
+      this.destroyToaster(this.stackBottom[0]);
+    }
+
+    if (this.stackTop.length > 5) {
+      this.stackTop[0].instance.setShowToaster(false);
+      this.destroyToaster(this.stackTop[0]);
     }
   }
 
   destroyToaster(toaster: any): void {
     let stack;
-
     if (toaster.instance.orientation === PoToasterOrientation.Top) {
       stack = this.stackTop;
     } else {
@@ -70,11 +86,12 @@ export class PoNotificationService extends PoNotificationBaseService {
     const index = stack.indexOf(toaster);
     stack.splice(index, 1);
 
-    this.poComponentInjector.destroyComponentInApplication(toaster);
-
-    for (let count = 0; count < stack.length; count++) {
-      stack[count].instance.changePosition(count);
-    }
+    setTimeout(() => {
+      this.poComponentInjector.destroyComponentInApplication(toaster);
+      for (let count = 0; count < stack.length; count++) {
+        stack[count].instance.changePosition(count);
+      }
+    }, 500);
   }
 
   private observableOnClose(componentRef: any) {
