@@ -87,6 +87,7 @@ export class PoNotificationService extends PoNotificationBaseService {
     stack.splice(index, 1);
 
     setTimeout(() => {
+      console.log('Tamanho z = ' + this.stackBottom.length);
       this.poComponentInjector.destroyComponentInApplication(toaster);
       for (let count = 0; count < stack.length; count++) {
         stack[count].instance.changePosition(count);

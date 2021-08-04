@@ -22,6 +22,10 @@ describe('PoNotificationService:', () => {
     jasmine.clock().install();
 
     notificationService = TestBed.inject(PoNotificationService);
+    notificationService.stackTop = [];
+    notificationService.stackTop.length = 0;
+    notificationService.stackBottom = [];
+    notificationService.stackBottom.length = 0;
   });
 
   afterEach(() => {
@@ -86,7 +90,7 @@ describe('PoNotificationService:', () => {
 
       expect(notificationService.stackTop.length === 2).toBeTruthy();
 
-      tick(4101);
+      tick(4001);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
     }));
@@ -101,5 +105,39 @@ describe('PoNotificationService:', () => {
       notificationService['observableOnClose'](fakeRef);
       expect(spy).toHaveBeenCalled();
     });
+
+    it('should call destroy toaster when stack top is more than 5', fakeAsync(() => {
+      for (let i = 0; i < 6; i++) {
+        notificationService.success({
+          message: '',
+          orientation: PoToasterOrientation.Top,
+          action: () => {
+            alert('');
+          },
+          actionLabel: 'close'
+        });
+      }
+
+      spyOn(notificationService, 'verifyLimitToaster');
+      tick(501);
+      expect(notificationService.stackTop.length).toBe(5);
+    }));
+
+    it('should call destroy toaster when stack bottom is more than 5', fakeAsync(() => {
+      for (let i = 0; i < 6; i++) {
+        notificationService.success({
+          message: '',
+          orientation: PoToasterOrientation.Bottom,
+          action: () => {
+            alert('');
+          },
+          actionLabel: 'close'
+        });
+      }
+
+      spyOn(notificationService, 'verifyLimitToaster');
+      tick(501);
+      expect(notificationService.stackBottom.length).toBe(5);
+    }));
   });
 });

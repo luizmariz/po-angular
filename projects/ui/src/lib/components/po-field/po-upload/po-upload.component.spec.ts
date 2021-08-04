@@ -21,6 +21,7 @@ import { PoUploadFile } from './po-upload-file';
 import { PoUploadFileRestrictionsComponent } from './po-upload-file-restrictions/po-upload-file-restrictions.component';
 import { PoUploadService } from './po-upload.service';
 import { PoUploadStatus } from './po-upload-status.enum';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PoUploadComponent:', () => {
   let component: PoUploadComponent;
@@ -38,7 +39,7 @@ describe('PoUploadComponent:', () => {
 
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [PoButtonModule, PoContainerModule, PoProgressModule, PoServicesModule],
+      imports: [PoButtonModule, PoContainerModule, PoProgressModule, PoServicesModule, NoopAnimationsModule],
       declarations: [
         PoUploadComponent,
         PoFieldContainerComponent,
