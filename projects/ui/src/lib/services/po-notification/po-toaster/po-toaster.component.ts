@@ -20,6 +20,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 @Component({
   selector: 'po-toaster',
   templateUrl: './po-toaster.component.html',
+  styleUrls: ['./po.toaster.css'],
   animations: [
     trigger('fadeInOut', [
       state(
@@ -28,7 +29,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
           opacity: 0
         })
       ),
-      transition('void <=> *', animate(500))
+      transition('void <=> *', animate(300))
     ])
   ]
 })

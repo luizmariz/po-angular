@@ -6,6 +6,9 @@ import { PoToaster } from './po-toaster/po-toaster.interface';
 import { PoToasterOrientation } from './po-toaster/po-toaster-orientation.enum';
 import { PoToasterComponent } from './po-toaster/po-toaster.component';
 
+const MAX_LENGTH_NOTIFICATION = 5;
+const TIME_OUT_FADEOUT = 300;
+
 /**
  * @docsExtends PoNotificationBaseService
  *
@@ -36,7 +39,6 @@ export class PoNotificationService extends PoNotificationBaseService {
   }
 
   createToaster(toaster: PoToaster): void {
-    this.verifyLimitToaster();
     const componentRef: ComponentRef<any> = this.poComponentInjector.createComponentInApplication(PoToasterComponent);
     toaster.componentRef = componentRef;
 
@@ -52,24 +54,21 @@ export class PoNotificationService extends PoNotificationBaseService {
 
     this.observableOnClose(componentRef);
 
-    console.log('Tamanho n = ' + this.stackBottom.length);
-
     if (!(toaster.action && toaster.actionLabel)) {
       setTimeout(() => {
         componentRef.instance.setShowToaster(false);
         this.destroyToaster(componentRef);
       }, toaster.duration);
     }
-    console.log('Tamanho o = ' + this.stackBottom.length);
   }
 
   verifyLimitToaster() {
-    if (this.stackBottom.length > 5) {
+    if (this.stackBottom.length > MAX_LENGTH_NOTIFICATION) {
       this.stackBottom[0].instance.setShowToaster(false);
       this.destroyToaster(this.stackBottom[0]);
     }
 
-    if (this.stackTop.length > 5) {
+    if (this.stackTop.length > MAX_LENGTH_NOTIFICATION) {
       this.stackTop[0].instance.setShowToaster(false);
       this.destroyToaster(this.stackTop[0]);
     }
@@ -87,12 +86,11 @@ export class PoNotificationService extends PoNotificationBaseService {
     stack.splice(index, 1);
 
     setTimeout(() => {
-      console.log('Tamanho z = ' + this.stackBottom.length);
       this.poComponentInjector.destroyComponentInApplication(toaster);
       for (let count = 0; count < stack.length; count++) {
         stack[count].instance.changePosition(count);
       }
-    }, 500);
+    }, TIME_OUT_FADEOUT);
   }
 
   private observableOnClose(componentRef: any) {

@@ -41,7 +41,7 @@ describe('PoNotificationService:', () => {
 
     expect(notificationService.stackTop.length === 1).toBeTruthy();
 
-    tick(10501);
+    tick(10301);
 
     expect(notificationService.stackTop.length === 0).toBeTruthy();
   }));
@@ -55,7 +55,7 @@ describe('PoNotificationService:', () => {
 
     expect(notificationService.stackBottom.length === 1).toBeTruthy();
 
-    tick(3501);
+    tick(3301);
 
     expect(notificationService.stackBottom.length === 0).toBeTruthy();
   }));
@@ -70,7 +70,7 @@ describe('PoNotificationService:', () => {
 
       expect(notificationService.stackTop.length === 1).toBeTruthy();
 
-      tick(3501);
+      tick(3301);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
     }));
@@ -90,7 +90,7 @@ describe('PoNotificationService:', () => {
 
       expect(notificationService.stackTop.length === 2).toBeTruthy();
 
-      tick(4001);
+      tick(3601);
 
       expect(notificationService.stackTop.length === 0).toBeTruthy();
     }));
@@ -119,7 +119,7 @@ describe('PoNotificationService:', () => {
       }
 
       spyOn(notificationService, 'verifyLimitToaster');
-      tick(501);
+      tick(301);
       expect(notificationService.stackTop.length).toBe(5);
     }));
 
@@ -136,7 +136,7 @@ describe('PoNotificationService:', () => {
       }
 
       spyOn(notificationService, 'verifyLimitToaster');
-      tick(501);
+      tick(301);
       expect(notificationService.stackBottom.length).toBe(5);
     }));
   });

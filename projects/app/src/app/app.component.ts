@@ -21,32 +21,8 @@ export class AppComponent {
     });
   }
 
-  variosSemAction() {
-    for (let i = 0; i < 30; i++) {
-      this.notification.success({
-        message: 'type'
-      });
-      this.notification.error({
-        message: 'type'
-      });
-    }
-  }
-
-  variosSemAction2() {
-    for (let i = 0; i < 30; i++) {
-      this.notification.information({
-        message: 'type'
-      });
-      setTimeout(() => {
-        this.notification.warning({
-          message: 'type'
-        });
-      }, 1000);
-    }
-  }
-
-  variosComAction() {
-    for (let i = 0; i < 30; i++) {
+  seisToaster() {
+    for (let i = 0; i < 5; i++) {
       this.notification.success({
         message: 'type',
         action: () => {
@@ -54,13 +30,13 @@ export class AppComponent {
         },
         actionLabel: 'close'
       });
-      this.notification.error({
-        message: 'type',
-        action: () => {
-          alert('aa');
-        },
-        actionLabel: 'close'
-      });
     }
+    this.notification.error({
+      message: 'type',
+      action: () => {
+        alert('aa');
+      },
+      actionLabel: 'close'
+    });
   }
 }

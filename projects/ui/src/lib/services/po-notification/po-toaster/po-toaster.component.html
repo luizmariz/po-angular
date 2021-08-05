@@ -1,8 +1,7 @@
 <div
-  [@fadeInOut]
   #toaster
   *ngIf="getShowToaster()"
-  class="po-toaster {{ getToasterType() }} {{ getToasterPosition() }} po-clickable"
+  class="elementToFadeInAndOut po-toaster {{ getToasterType() }} {{ getToasterPosition() }} po-clickable"
   (click)="close()"
 >
   <div class="po-toaster-icon">

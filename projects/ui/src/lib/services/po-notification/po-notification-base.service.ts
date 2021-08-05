@@ -87,7 +87,6 @@ export abstract class PoNotificationBaseService {
    * @param {PoNotification | string} notification Objeto PoNotification com os dados da notificação
    */
   private buildToaster(notification: PoNotification | string, type: PoToasterType): PoToaster {
-    this.verifyLimitToaster();
     let index = 0;
     let orientation;
     if (
@@ -147,5 +146,5 @@ export abstract class PoNotificationBaseService {
    * Método responsável por remover o primeiro po-toaster caso já existam 5 notificações.
    *
    */
-  abstract verifyLimitToaster(abc?: string): void;
+  abstract verifyLimitToaster(): void;
 }
