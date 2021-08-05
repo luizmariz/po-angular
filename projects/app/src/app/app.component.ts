@@ -24,11 +24,7 @@ export class AppComponent {
   seisToaster() {
     for (let i = 0; i < 5; i++) {
       this.notification.success({
-        message: 'type',
-        action: () => {
-          alert('aa');
-        },
-        actionLabel: 'close'
+        message: 'type'
       });
     }
     this.notification.error({

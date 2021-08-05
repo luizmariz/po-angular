@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
@@ -20,18 +20,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 @Component({
   selector: 'po-toaster',
   templateUrl: './po-toaster.component.html',
-  styleUrls: ['./po.toaster.css'],
-  animations: [
-    trigger('fadeInOut', [
-      state(
-        'void',
-        style({
-          opacity: 0
-        })
-      ),
-      transition('void <=> *', animate(300))
-    ])
-  ]
+  styleUrls: ['./po.toaster.css']
 })
 export class PoToasterComponent extends PoToasterBaseComponent {
   /* Componente toaster */
@@ -53,7 +42,8 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   constructor(
     languageService: PoLanguageService,
     public changeDetector: ChangeDetectorRef,
-    private elementeRef?: ElementRef
+    private elementeRef?: ElementRef,
+    private renderer?: Renderer2
   ) {
     super();
   }
@@ -73,8 +63,15 @@ export class PoToasterComponent extends PoToasterBaseComponent {
 
   /* Fecha o componente Toaster */
   close(): void {
-    this.showToaster = false;
+    this.setFadeOut();
     this.observableOnClose.next(true);
+  }
+
+  setFadeOut() {
+    if (this.toaster.nativeElement.classList.contains('fade-in')) {
+      this.renderer.removeClass(this.toaster.nativeElement, 'fade-in');
+      this.renderer.addClass(this.toaster.nativeElement, 'fade-out');
+    }
   }
 
   /* Configura o Toaster com os atributos passados para ele */

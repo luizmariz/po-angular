@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser/';
 
 import { configureTestSuite } from './../../../util-test/util-expect.spec';
@@ -190,14 +190,16 @@ describe('PoToasterComponent', () => {
     expect(component.action).toHaveBeenCalled();
   });
 
-  it('should be call the `component.close` method how must close my `component` correctly', () => {
+  it('should be call the `component.close` method how must close my `component` correctly', fakeAsync(() => {
     component.configToaster(toasterErrorWithAction);
+    tick(301);
     expect(fixture.debugElement.query(By.css('.po-toaster'))).not.toBeNull();
 
-    component.close();
+    component.setShowToaster(false);
+    tick(301);
     fixture.detectChanges();
     expect(fixture.debugElement.query(By.css('.po-toaster'))).toBeNull();
-  });
+  }));
 
   describe('Methods:', () => {
     it('onButtonClose: should call `close` if action and actionLabel are truthy', () => {
@@ -237,6 +239,49 @@ describe('PoToasterComponent', () => {
 
       expect(spyClose).toHaveBeenCalled();
       expect(spyToasterAction).not.toHaveBeenCalled();
+    });
+
+    it('close: should call `FadeOut` when click to close notification', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+
+      const spyFadeOut = spyOn(component, 'setFadeOut');
+      component.close();
+
+      expect(spyFadeOut).toHaveBeenCalled();
+    });
+
+    it('setFadeOut: if the class is fade out it must keep fade out', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'fade-out';
+      const spyFadeOut = spyOn(component, 'setFadeOut');
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).toContain('fade-out');
+      expect(component.toaster.nativeElement.className).not.toContain('fade-in');
+    });
+
+    it('setFadeOut: if the css class is different from fade-in/out, it must keep the same class', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'po-toaster-test';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).not.toContain('fade-out');
+      expect(component.toaster.nativeElement.className).not.toContain('fade-in');
+      expect(component.toaster.nativeElement.className).toContain('po-toaster-test');
+    });
+
+    it('setFadeOut: if the class is fade-in it must change to fade-out', () => {
+      component.action = () => {};
+      component.actionLabel = 'Details';
+      component.toaster.nativeElement.className = 'fade-in';
+
+      component.setFadeOut();
+
+      expect(component.toaster.nativeElement.className).not.toContain('fade-in');
     });
   });
 

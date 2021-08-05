@@ -1,13 +1,29 @@
-.elementToFadeInAndOut {
-  animation: fade 0.5s linear forwards;
+.fade-in {
+  animation: frame-fade-in 0.3s linear forwards;
+  transition: 0.05s ease-out;
 }
 
-@keyframes fade {
+@keyframes frame-fade-in {
   0% {
     opacity: 0;
   }
 
   100% {
     opacity: 1;
+  }
+}
+
+.fade-out {
+  animation: frame-fade-out 0.3s linear forwards;
+  transition: 0.05s ease-out;
+}
+
+@keyframes frame-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
   }
 }

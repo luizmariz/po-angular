@@ -56,7 +56,7 @@ export class PoNotificationService extends PoNotificationBaseService {
 
     if (!(toaster.action && toaster.actionLabel)) {
       setTimeout(() => {
-        componentRef.instance.setShowToaster(false);
+        componentRef.instance.setFadeOut();
         this.destroyToaster(componentRef);
       }, toaster.duration);
     }
@@ -64,12 +64,12 @@ export class PoNotificationService extends PoNotificationBaseService {
 
   verifyLimitToaster() {
     if (this.stackBottom.length > MAX_LENGTH_NOTIFICATION) {
-      this.stackBottom[0].instance.setShowToaster(false);
+      this.stackBottom[0].instance.setFadeOut();
       this.destroyToaster(this.stackBottom[0]);
     }
 
     if (this.stackTop.length > MAX_LENGTH_NOTIFICATION) {
-      this.stackTop[0].instance.setShowToaster(false);
+      this.stackTop[0].instance.setFadeOut();
       this.destroyToaster(this.stackTop[0]);
     }
   }
@@ -90,6 +90,7 @@ export class PoNotificationService extends PoNotificationBaseService {
       for (let count = 0; count < stack.length; count++) {
         stack[count].instance.changePosition(count);
       }
+      toaster.instance.setShowToaster(false);
     }, TIME_OUT_FADEOUT);
   }
 
