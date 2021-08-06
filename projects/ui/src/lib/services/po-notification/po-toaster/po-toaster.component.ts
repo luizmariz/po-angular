@@ -10,7 +10,6 @@ import { PoToasterBaseComponent } from './po-toaster-base.component';
 import { PoToaster } from './po-toaster.interface';
 import { PoToasterType } from './po-toaster-type.enum';
 import { PoToasterOrientation } from './po-toaster-orientation.enum';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 
 /**
  * @docsPrivate
@@ -32,8 +31,6 @@ export class PoToasterComponent extends PoToasterBaseComponent {
   private margin: number = 20;
   /* Observable para monitorar o Close to Toaster */
   private observableOnClose = new Subject<any>();
-  /* Mostra ou oculta o Toaster */
-  private showToaster: boolean = true;
   /* Posição do Toaster*/
   private toasterPosition: string = 'po-toaster-bottom';
   /* Tipo do Toaster */
@@ -46,6 +43,10 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     private renderer?: Renderer2
   ) {
     super();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.renderer.addClass(this.toaster.nativeElement, 'po-toaster-visible'));
   }
 
   /* Muda a posição do Toaster na tela*/
@@ -63,15 +64,12 @@ export class PoToasterComponent extends PoToasterBaseComponent {
 
   /* Fecha o componente Toaster */
   close(): void {
-    this.setFadeOut();
     this.observableOnClose.next(true);
   }
 
   setFadeOut() {
-    if (this.toaster.nativeElement.classList.contains('fade-in')) {
-      this.renderer.removeClass(this.toaster.nativeElement, 'fade-in');
-      this.renderer.addClass(this.toaster.nativeElement, 'fade-out');
-    }
+    this.renderer.removeClass(this.toaster.nativeElement, 'po-toaster-visible');
+    this.renderer.addClass(this.toaster.nativeElement, 'po-toaster-invisible');
   }
 
   /* Configura o Toaster com os atributos passados para ele */
@@ -119,14 +117,6 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     this.changeDetector.detectChanges();
   }
 
-  getShowToaster() {
-    return this.showToaster;
-  }
-
-  setShowToaster(visible: boolean) {
-    this.showToaster = visible;
-  }
-
   getIcon() {
     return this.icon;
   }
@@ -139,16 +129,22 @@ export class PoToasterComponent extends PoToasterBaseComponent {
     return this.toasterType;
   }
 
-  onButtonClose() {
+  onButtonClose(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (this.action && !this.actionLabel) {
-      this.poToasterAction();
+      this.poToasterAction(event);
     } else {
       this.close();
     }
   }
 
   /* Chama a função passada pelo atributo `action` */
-  poToasterAction(): void {
+  poToasterAction(event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
     this.action(this);
   }
 }

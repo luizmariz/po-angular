@@ -1,4 +1,4 @@
-.fade-in {
+/* .fade-in {
   animation: frame-fade-in 0.3s linear forwards;
   transition: 0.05s ease-out;
 }
@@ -26,4 +26,21 @@
   100% {
     opacity: 0;
   }
+} */
+
+.po-toaster {
+  opacity: 0;
+  transition-property: opacity, bottom, top;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+}
+
+.po-toaster-invisible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.po-toaster-visible {
+  opacity: 1;
+  pointer-events: auto;
 }

@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { PoNotificationService } from '../../../ui/src/lib';
+import { PoNotificationService, PoToasterOrientation } from '../../../ui/src/lib';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +13,7 @@ export class AppComponent {
 
   notificacao(type: string) {
     this.notification[type]({
+      // orientation: PoToasterOrientation.Top,
       message: 'type',
       action: () => {
         alert('aa');

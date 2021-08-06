@@ -139,12 +139,4 @@ export abstract class PoNotificationBaseService {
    * @param {PoToasterOrientation} orientation Orientação do PoToaster: Top ou Bottom
    */
   abstract destroyToaster(toaster: ComponentRef<any>): void;
-
-  /**
-   * @docsPrivate
-   *
-   * Método responsável por remover o primeiro po-toaster caso já existam 5 notificações.
-   *
-   */
-  abstract verifyLimitToaster(): void;
 }
