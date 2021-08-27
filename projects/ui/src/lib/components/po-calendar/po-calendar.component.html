@@ -18,6 +18,7 @@
   <po-calendar-wrapper
     [p-value]="getValue(partType)"
     [p-activate-date]="getActivateDate(partType)"
+    [p-hover-value]="hoverValue"
     [p-locale]="locale"
     [p-min-date]="minDate"
     [p-max-date]="maxDate"
@@ -27,6 +28,7 @@
     [p-selected-value]="value"
     (p-header-change)="onHeaderChange($event, partType)"
     (p-select-date)="onSelectDate($event, partType)"
+    (p-hover-date)="onHoverDate($event)"
   >
   </po-calendar-wrapper>
 </ng-template>

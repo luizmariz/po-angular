@@ -9,6 +9,9 @@ import {
   EventEmitter
 } from '@angular/core';
 
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 import { PoCalendarLangService } from '../services/po-calendar.lang.service';
 import { PoCalendarService } from '../services/po-calendar.service';
 import { PoDateService } from '../../../services/po-date/po-date.service';
@@ -42,6 +45,10 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
   @Output('p-header-change') headerChange = new EventEmitter<any>();
 
   @Output('p-select-date') selectDate = new EventEmitter<any>();
+
+  @Output('p-hover-date') hoverDate = new Subject<Date>().pipe(debounceTime(100));
+
+  @Input('p-hover-value') hoverValue: Date;
 
   currentYear: number;
   displayDays: Array<number>;
@@ -245,6 +252,8 @@ export class PoCalendarWrapperComponent implements OnInit, OnChanges {
 
     if (this.range && (this.equalsDate(date, start) || this.equalsDate(date, end))) {
       return this.getColorForDate(date, local);
+    } else if (this.range && start && !end && date > start && date < this.hoverValue) {
+      return `po-calendar-box-${local}-hover`;
     } else if (this.range && start && end && date > start && date < end) {
       return this.getColorForDateRange(date, local);
     } else if (!this.range && this.equalsDate(date, this.value)) {

@@ -51,6 +51,8 @@ const poCalendarRangeWidth = 600;
   providers
 })
 export class PoCalendarComponent extends PoCalendarBaseComponent implements OnInit {
+  hoverValue: Date;
+
   constructor(private changeDetector: ChangeDetectorRef, poDate: PoDateService, languageService: PoLanguageService) {
     super(poDate, languageService);
   }
@@ -77,6 +79,10 @@ export class PoCalendarComponent extends PoCalendarBaseComponent implements OnIn
     } else {
       return this.value;
     }
+  }
+
+  onHoverDate(date) {
+    this.hoverValue = date;
   }
 
   onSelectDate(selectedDate, partType?) {
