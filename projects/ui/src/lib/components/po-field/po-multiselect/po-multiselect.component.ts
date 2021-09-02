@@ -21,6 +21,7 @@ import { PoLanguageService } from '../../../services/po-language/po-language.ser
 
 import { PoMultiselectBaseComponent } from './po-multiselect-base.component';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
+import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 
 const poMultiselectContainerOffset = 8;
 const poMultiselectContainerPositionDefault = 'bottom';
@@ -100,6 +101,7 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,
     private controlPosition: PoControlPositionService,
+    public defaultService: PoMultiselectFilterService,
     languageService: PoLanguageService
   ) {
     super(languageService);
@@ -317,9 +319,9 @@ export class PoMultiselectComponent extends PoMultiselectBaseComponent implement
   }
 
   applyFilter(value: string = ''): Observable<Array<PoMultiselectOption>> {
-    const param = { property: 'label', value };
-
-    return this.filterService.getFilteredData(param).pipe(
+    const param = { property: 'label', value: value };
+    console.log('chamou');
+    return this.service.getFilteredData(param).pipe(
       catchError(err => {
         this.isServerSearching = false;
         return of([]);

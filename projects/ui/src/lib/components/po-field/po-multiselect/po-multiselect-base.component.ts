@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operato
 
 import {
   convertToBoolean,
+  isTypeof,
   removeDuplicatedOptions,
   removeUndefinedAndNullOptions,
   sortOptionsByProperty
@@ -19,8 +20,11 @@ import { PoMultiselectLiterals } from './po-multiselect-literals.interface';
 import { PoMultiselectOption } from './po-multiselect-option.interface';
 import { InputBoolean } from '../../../decorators';
 import { PoMultiselectFilter } from './po-multiselect-filter.interface';
+import { PoMultiselectFilterService } from './po-multiselect-filter.service';
 
 const PO_MULTISELECT_DEBOUNCE_TIME_DEFAULT = 400;
+const PO_MULTISELECT_FIELD_LABEL_DEFAULT = 'label';
+const PO_MULTISELECT_FIELD_VALUE_DEFAULT = 'value';
 
 export const poMultiselectLiteralsDefault = {
   en: <PoMultiselectLiterals>{
@@ -123,6 +127,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   isServerSearching = false;
   isFirstFilter: boolean = true;
   filterSubject = new Subject();
+  service: PoMultiselectFilterService;
+  defaultService: PoMultiselectFilterService;
 
   // eslint-disable-next-line
   protected onModelTouched: any = null;
@@ -131,7 +137,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   protected resizeListener: () => void;
   protected getObjectsByValuesSubscription: Subscription;
 
-  private _filterService?: PoMultiselectFilter;
+  private _filterService?: PoMultiselectFilter | string;
   private _debounceTime?: number = 400;
   private _disabled?: boolean = false;
   private _filterMode?: PoMultiselectFilterMode = PoMultiselectFilterMode.startsWith;
@@ -141,6 +147,8 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   private _required?: boolean = false;
   private _sort?: boolean = false;
   private _autoHeight: boolean = false;
+  private _fieldLabel?: string = 'label';
+  private _fieldValue?: string = 'value';
   private language: string;
 
   private lastLengthModel;
@@ -156,7 +164,7 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
    *
    * > Definirá por padrão a propriedade `p-auto-height` como `true`, mas a mesma pode ser redefinida caso necessário.
    */
-  @Input('p-filter-service') set filterService(value: PoMultiselectFilter) {
+  @Input('p-filter-service') set filterService(value: PoMultiselectFilter | string) {
     this._filterService = value;
     this.autoHeight = this.autoHeightInitialValue !== undefined ? this.autoHeightInitialValue : true;
     this.options = [];
@@ -388,24 +396,58 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
     return this._filterMode;
   }
 
+  @Input('p-field-label') set fieldLabel(value: string) {
+    this._fieldLabel = value || PO_MULTISELECT_FIELD_LABEL_DEFAULT;
+
+    if (isTypeof(this.filterService, 'string') && this.service) {
+      this.service.fieldLabel = this._fieldLabel;
+    }
+  }
+
+  get fieldLabel() {
+    return this._fieldLabel;
+  }
+
+  @Input('p-field-value') set fieldValue(value: string) {
+    this._fieldValue = value || PO_MULTISELECT_FIELD_VALUE_DEFAULT;
+
+    if (isTypeof(this.filterService, 'string') && this.service) {
+      this.service.fieldValue = this._fieldValue;
+    }
+  }
+
+  get fieldValue() {
+    return this._fieldValue;
+  }
+
   constructor(languageService: PoLanguageService) {
     this.language = languageService.getShortLanguage();
   }
 
   ngOnInit() {
     if (this.filterService) {
-      this.filterSubject
-        .pipe(
-          debounceTime(this.debounceTime),
-          distinctUntilChanged(),
-          tap(() => (this.isServerSearching = true)),
-          switchMap((search: string) => this.applyFilter(search)),
-          tap(() => (this.isServerSearching = false))
-        )
-        .subscribe();
+      this.setService(this.filterService);
     }
 
     this.updateList(this.options);
+  }
+
+  setService(service: PoMultiselectFilter | string) {
+    if (isTypeof(service, 'object')) {
+      this.service = <PoMultiselectFilterService>service;
+    } else {
+      this.service = this.defaultService;
+      this.service.configProperties(<string>service, this.fieldLabel, this.fieldValue);
+    }
+    this.filterSubject
+      .pipe(
+        debounceTime(this.debounceTime),
+        distinctUntilChanged(),
+        tap(() => (this.isServerSearching = true)),
+        switchMap((search: string) => this.applyFilter(search)),
+        tap(() => (this.isServerSearching = false))
+      )
+      .subscribe();
   }
 
   validAndSortOptions() {
@@ -525,8 +567,9 @@ export abstract class PoMultiselectBaseComponent implements ControlValueAccessor
   writeValue(values: any): void {
     values = values || [];
 
-    if (this.filterService && values.length) {
-      this.getObjectsByValuesSubscription = this.filterService.getObjectsByValues(values).subscribe(options => {
+    if (this.service && values.length) {
+      this.getObjectsByValuesSubscription = this.service.getObjectsByValues(values).subscribe(options => {
+        console.log(options);
         this.updateSelectedOptions(options);
         this.callOnChange(this.selectedOptions);
       });

@@ -1,0 +1,10 @@
+<po-multiselect
+  class="po-md-6"
+  name="multiselect"
+  [(ngModel)]="multiselect"
+  p-label="Search a Hero"
+  p-filter-service="filterService"
+  [p-debounce-time]="debounce"
+  (p-change)="changeOptions($event)"
+>
+</po-multiselect>
